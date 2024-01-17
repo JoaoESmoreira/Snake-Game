@@ -27,24 +27,20 @@ class Snake:
         self.snake_pos = [(400, 400), (410, 400), (420, 400)]
         self.game = game
 
-    def update_body(self, direction:str=None, fedding:str=False) -> None:
-        increment_x = -10
-        increment_y = 0
+    def update_body(self, direction:str, feeding:str=False) -> None:
+        if feeding:
+            self.snake_pos.append(self.snake_pos[-1])
         if direction == State.UP:
-            increment_x = 0
-            increment_y = -10
+            self.snake_pos.insert(0, (self.snake_pos[0][0], self.snake_pos[0][1]-10))
+            self.snake_pos.pop()
         elif direction == State.DOWN:
-            increment_x = 0
-            increment_y = 10
+            self.snake_pos.insert(0, (self.snake_pos[0][0], self.snake_pos[0][1]+10))
+            self.snake_pos.pop()
         elif direction == State.RIGHT:
-            increment_x = 10
-            increment_y = 0
+            self.snake_pos.insert(0, (self.snake_pos[0][0]+10, self.snake_pos[0][1]))
+            self.snake_pos.pop()
         elif direction == State.LEFT:
-            increment_x = -10
-            increment_y = 0
-        self.snake_pos.insert(0, 
-            (self.snake_pos[0][0]+increment_x,self.snake_pos[0][1]+increment_y))
-        if not fedding:
+            self.snake_pos.insert(0, (self.snake_pos[0][0]-10, self.snake_pos[0][1]))
             self.snake_pos.pop()
 
     def display(self) -> None:
@@ -68,6 +64,7 @@ class State:
     DOWN = "down"
     LEFT = "left"
     RIGHT = "right"
+    STOP = None
 
 class Game:
     def __init__(self):
@@ -75,13 +72,21 @@ class Game:
         self.screen = self._init_screen()
         self.clock = pygame.time.Clock()
         self.control = True
-        self.direction = State.LEFT
+        self.direction = State.STOP
 
         self.s = Snake(self)
         self.apple = Apple(self)
         self.score = 0
 
         self.main()
+    
+    def reset(self) -> None:
+        self.control = True
+        self.direction = State.STOP
+
+        self.s = Snake(self)
+        self.apple = Apple(self)
+        self.score = 0
 
     def _init_screen(self) -> pygame.Surface:
         screen = pygame.display.set_mode((600, 600))
@@ -99,7 +104,7 @@ class Game:
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 self.control = False
-            elif event.type == KEYDOWN:
+            elif event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_q:
                     self.control = False
                 elif event.key == pygame.K_UP and self.direction != State.DOWN:
@@ -110,7 +115,8 @@ class Game:
                     return State.RIGHT
                 elif event.key == pygame.K_LEFT and self.direction != State.RIGHT:
                     return State.LEFT
-        return self.direction
+        # return self.direction
+        return None
 
     def _board(self) -> None:
         self.screen.fill((204, 255, 229))
@@ -151,7 +157,7 @@ class Game:
             else:
                 self.s.update_body(self.direction)
             if self._crash():
-                break
+                self.reset()
 
             self.s.display()
             self.apple.display()
