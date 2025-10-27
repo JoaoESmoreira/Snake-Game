@@ -54,7 +54,7 @@ The game ends if the snake hits its body or the borders.
 In RL mode, the environment provides observations and rewards, guiding the agent to maximize its score.
 
 
-## Development
+## Contributing
 
 Contributions are what make the open source community such an amazing place to be learn, inspire, and create. Any contributions you make are greatly appreciated.
 
