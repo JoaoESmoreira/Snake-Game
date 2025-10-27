@@ -5,7 +5,7 @@ import matplotlib.pyplot as plt
 from snake import Snake, Apple, Game, Direction
 from collections import deque
 from model import Linear_QNet_Module, QTrainer
-from helper import plot
+# from helper import plot
 
 
 MAX_MEMORY = 100_000

@@ -109,7 +109,7 @@ class Game:
                 self.direction = Direction.UP
     
     def make_move(self, move):
-        self.clock.tick(20)
+        self.clock.tick(200)
         self._board()
         self._score_table()
 
@@ -152,7 +152,7 @@ class Game:
 
     def _init_screen(self) -> pygame.Surface:
         screen = pygame.display.set_mode((600, 600))
-        pygame.display.set_caption("Jogo da Cobrinha")
+        pygame.display.set_caption("Snake Game")
         icon = pygame.image.load("anaconda.png")
         pygame.display.set_icon(icon)
         self.font = pygame.font.Font("freesansbold.ttf", 32)
@@ -208,7 +208,7 @@ class Game:
 
     def main(self) -> None:
         while self.control:
-            self.clock.tick(13)
+            self.clock.tick(14)
             self._board()
             self._score_table()
 
